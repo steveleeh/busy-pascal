@@ -1,6 +1,6 @@
 /* =====================================================================
    🎨 STYLE.CSS - 贝叶斯“面积几何割裂”交互教学面板样式表 (高保真学术优化版)
-   解决问题：步骤 4 宇宙坍缩时标签移动跳跃、边框变化抖动 (物理对齐)
+   解决问题：步骤 7/8 物理倒带形变动效、标签自适应浮动、全物理尺寸避震
    ===================================================================== */
 
 :root {
@@ -244,7 +244,7 @@ body {
 }
 
 /* 6. "Winner" 线索横向切片容器 (Clue Strip)
-   优化：移除全局背景与边框，它只是一个结构透明容器，把高亮细分给子框，形成阶梯 */
+   优化：这里是一个透明容器，把高亮细分给子框，形成阶梯 */
 .clue-strip {
     position: absolute;
     left: 0;
@@ -300,7 +300,7 @@ body {
     box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
 }
 
-/* 标签优化：在 style 层面加入 transform 缺省占位，防止动画形变时产生突变的跳跃闪动 */
+/* 标签物理定位基础 */
 .box-label {
     position: absolute;
     font-size: 0.72rem;
@@ -321,8 +321,8 @@ body {
     top: 6px;
     transform: translate(0, 0);
     color: var(--color-ham-border);
-    background: rgba(209, 250, 229, 0.95);
-    border: 1px solid #a7f3d0;
+    background: white;
+    border: 1.5px solid var(--color-ham-border);
 }
 
 .intersection-spam .box-label {
@@ -330,8 +330,8 @@ body {
     bottom: 6px;
     transform: translate(0, 0);
     color: var(--color-spam-border);
-    background: rgba(254, 226, 226, 0.95);
-    border: 1px solid #fecaca;
+    background: white;
+    border: 1.5px solid var(--color-spam-border);
 }
 
 /* 7. 右侧：玻璃拟态叙述教学卡片 */
@@ -568,7 +568,9 @@ body {
     color: #94a3b8;
 }
 
-/* 10. 激活状态类 */
+/* =====================================================================
+   🏁 10. 步进激活状态控制 (动画极品对齐设计)
+   ===================================================================== */
 
 /* 步骤 1 */
 .state-1 .class-rect,
@@ -605,7 +607,7 @@ body {
     opacity: 1;
 }
 
-/* 步骤 4：缩减状态 */
+/* 步骤 4：收缩拉伸状态 */
 .state-4 .class-rect {
     opacity: 0.04;
 }
@@ -626,12 +628,10 @@ body {
     opacity: 0;
 }
 
-/* 🏛️ 步骤 4/5/6/7/8/9 全拉伸状态下，立柱内交集块无边框、无圆角、无阴影，融为一体 */
+/* 🚀 步骤 4/5/6/9 全拉伸状态下，立柱内交集块无边框、无圆角、无阴影，融为一体 */
 .state-4 .intersection-ham,
 .state-5 .intersection-ham,
 .state-6 .intersection-ham,
-.state-7 .intersection-ham,
-.state-8 .intersection-ham,
 .state-9 .intersection-ham {
     border-radius: 0;
     border: 3px solid transparent; 
@@ -643,8 +643,6 @@ body {
 .state-4 .intersection-spam,
 .state-5 .intersection-spam,
 .state-6 .intersection-spam,
-.state-7 .intersection-spam,
-.state-8 .intersection-spam,
 .state-9 .intersection-spam {
     border-radius: 0;
     border: 3px solid transparent; 
@@ -652,12 +650,10 @@ body {
     background: var(--color-spam-solid);
 }
 
-/* 🚀 步骤 4/5/6/7/8/9 状态下，立柱内标签精确定位与平滑过渡 */
+/* 🚀 步骤 4/5/6/9 状态下，立柱内标签腰部完美定位与平滑过渡 */
 .state-4 .intersection-ham .box-label,
 .state-5 .intersection-ham .box-label,
 .state-6 .intersection-ham .box-label,
-.state-7 .intersection-ham .box-label,
-.state-8 .intersection-ham .box-label,
 .state-9 .intersection-ham .box-label {
     opacity: 1;
     left: 50%;
@@ -672,8 +668,6 @@ body {
 .state-4 .intersection-spam .box-label,
 .state-5 .intersection-spam .box-label,
 .state-6 .intersection-spam .box-label,
-.state-7 .intersection-spam .box-label,
-.state-8 .intersection-spam .box-label,
 .state-9 .intersection-spam .box-label {
     opacity: 1;
     left: 50%;
@@ -690,62 +684,145 @@ body {
     animation: pulse-glow-border 1.5s infinite alternate;
 }
 
-/* 🏛️ 步骤 6、7、8、9 统一大拉伸状态通用渲染设定 */
-.state-6 .class-rect, .state-7 .class-rect, .state-8 .class-rect, .state-9 .class-rect {
+/* 🏛️ 步骤 6、9 统一大拉伸静态呈现 */
+.state-6 .class-rect, .state-9 .class-rect {
     opacity: 0.04;
 }
-.state-6 .split-line, .state-7 .split-line, .state-8 .split-line, .state-9 .split-line {
+.state-6 .split-line, .state-9 .split-line {
     opacity: 0.04;
 }
 .state-6 .label-u, .state-6 .label-ham, .state-6 .label-spam,
-.state-7 .label-u, .state-7 .label-ham, .state-7 .label-spam,
-.state-8 .label-u, .state-8 .label-ham, .state-8 .label-spam,
 .state-9 .label-u, .state-9 .label-ham, .state-9 .label-spam {
     opacity: 0;
 }
-.state-6 .clue-strip, .state-7 .clue-strip, .state-8 .clue-strip, .state-9 .clue-strip {
+.state-6 .clue-strip, .state-9 .clue-strip {
     opacity: 1;
     top: 0 !important;
     height: 100% !important;
 }
-.state-6 .strip-label, .state-7 .strip-label, .state-8 .strip-label, .state-9 .strip-label {
+.state-6 .strip-label, .state-9 .strip-label {
     opacity: 0;
 }
-
-/* 步骤 6、7、8、9 下，目标假说色块默认的静态稳重边框（停止刺眼的急剧闪烁，方便学术对比与阅读） */
-.state-6 .intersection-spam,
-.state-7 .intersection-spam,
-.state-8 .intersection-spam,
-.state-9 .intersection-spam {
+.state-6 .intersection-spam, .state-9 .intersection-spam {
     box-shadow: inset 0 0 0 3px var(--color-spam-border);
     background-color: rgba(239, 68, 68, 0.45);
 }
 
-/* 🚀 步骤 7 视觉增强：当解释分子（目标联合概率）时，目标假说色块呈现温和的红粉色呼吸闪烁 */
+/* =====================================================================
+   🌉 11. 新增：步骤 7 与步骤 8 的“物理倒带 (Morph Back)”独立几何控制
+   ===================================================================== */
+
+/* 🚀 步骤 7 状态控制（物理倒回 Step 3 比例，准备分子拆解） */
+.state-7 .class-rect {
+    opacity: 0.35; /* 背景竖向二分大板隐约可见，便于看清宽度 P(A) */
+}
+.state-7 .split-line {
+    opacity: 0.35;
+    transform: scaleY(1);
+}
+.state-7 .clue-strip {
+    opacity: 1;
+    bottom: 0;
+    height: 80% !important; /* 倒回到 Step 3 时的 80% 高度 */
+}
+/* 步骤 7 重点：绿色正常邮件子集在分子计算中完全无关，因此强力暗淡 */
+.state-7 .intersection-ham {
+    opacity: 0.04 !important; 
+    border: 3px dashed #cbd5e1;
+    box-shadow: none;
+}
+.state-7 .intersection-ham .box-label {
+    opacity: 0 !important; /* 隐藏 Ham 标签 */
+}
+/* 步骤 7 重点：红色垃圾邮件子集亮起，作为分子高亮 */
 .state-7 .intersection-spam {
-    animation: pulse-glow-border-soft 1.5s infinite alternate;
+    opacity: 1;
+    border: 3px solid var(--color-clue-border);
+    border-radius: 8px;
+    box-shadow: var(--shadow-glow);
+    animation: pulse-glow-border-soft 1.5s infinite alternate; /* 红色柔和脉冲 */
+}
+.state-7 .intersection-spam .box-label {
+    opacity: 1;
+    right: 15px;
+    bottom: 12px;
+    transform: translate(0, 0);
+    font-size: 0.72rem;
+    color: var(--color-spam-border);
+    background: white;
+    border: 1.5px solid var(--color-spam-border);
+    line-height: 1.4;
+    text-align: right;
 }
 
-/* 🚀 步骤 8 视觉增强：当解释分母（全概率公式求和）时，左侧 Ham 切片色块呈现温和的绿黄色呼吸闪烁，与右侧红黄色共同提示 */
+/* 🚀 步骤 8 状态控制（物理倒回 Step 3 比例，准备分母全概率累加） */
+.state-8 .class-rect {
+    opacity: 0.35; /* 背景大板隐约可见，用于衬托宽度 P(A) */
+}
+.state-8 .split-line {
+    opacity: 0.35;
+    transform: scaleY(1);
+}
+.state-8 .clue-strip {
+    opacity: 1;
+    bottom: 0;
+    height: 80% !important;
+}
+/* 步骤 8 重点：左右两个子集块全部作为分母因子亮起，进行全概率求和 */
 .state-8 .intersection-ham {
-    animation: pulse-glow-border-green 1.5s infinite alternate;
+    opacity: 1;
+    border: 3px solid var(--color-clue-border);
+    border-radius: 8px;
+    box-shadow: var(--shadow-glow);
+    animation: pulse-glow-border-green 1.5s infinite alternate; /* 绿色柔和脉冲 */
+}
+.state-8 .intersection-spam {
+    opacity: 1;
+    border: 3px solid var(--color-clue-border);
+    border-radius: 8px;
+    box-shadow: var(--shadow-glow);
+}
+/* 步骤 8 精确标签定位 */
+.state-8 .intersection-ham .box-label {
+    opacity: 1;
+    left: 15px;
+    top: 6px;
+    transform: translate(0, 0);
+    font-size: 0.72rem;
+    color: var(--color-ham-border);
+    background: white;
+    border: 1.5px solid var(--color-ham-border);
+    line-height: 1.4;
+    text-align: left;
+}
+.state-8 .intersection-spam .box-label {
+    opacity: 1;
+    right: 15px;
+    bottom: 12px;
+    transform: translate(0, 0);
+    font-size: 0.72rem;
+    color: var(--color-spam-border);
+    background: white;
+    border: 1.5px solid var(--color-spam-border);
+    line-height: 1.4;
+    text-align: right;
 }
 
 @keyframes pulse-glow-border-soft {
     0% {
-        background-color: rgba(239, 68, 68, 0.4);
+        background-color: rgba(239, 68, 68, 0.3);
     }
     100% {
-        background-color: rgba(239, 68, 68, 0.65);
+        background-color: rgba(239, 68, 68, 0.55);
     }
 }
 
 @keyframes pulse-glow-border-green {
     0% {
-        background-color: rgba(16, 185, 129, 0.2);
+        background-color: rgba(16, 185, 129, 0.18);
     }
     100% {
-        background-color: rgba(16, 185, 129, 0.5);
+        background-color: rgba(16, 185, 129, 0.45);
     }
 }
 
@@ -759,3 +836,54 @@ body {
         box-shadow: inset 0 0 0 6px var(--color-spam-border), 0 0 20px rgba(239, 68, 68, 0.3);
     }
 }
+
+/* =====================================================================
+   📐 12. 新增：物理尺规测量设计 (CAD Blueprints Rulers)
+   ===================================================================== */
+.visual-ruler {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 15;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 横向测量尺：高度固定为 20px，左右侧有小刻度竖线，中间一条水平细线 */
+.horizontal-ruler {
+    height: 20px;
+    border-left: 2px solid var(--color-clue-border);
+    border-right: 2px solid var(--color-clue-border);
+    background-image: linear-gradient(to right, transparent 0%, var(--color-clue-border) 0%, var(--color-clue-border) 100%, transparent 100%);
+    background-size: 100% 2px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* 纵向测量尺：宽度固定为 20px，上下侧有小刻度横线，中间一条垂直细线 */
+.vertical-ruler {
+    width: 20px;
+    border-top: 2px solid var(--color-clue-border);
+    border-bottom: 2px solid var(--color-clue-border);
+    background-image: linear-gradient(to bottom, transparent 0%, var(--color-clue-border) 0%, var(--color-clue-border) 100%, transparent 100%);
+    background-size: 2px 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* 测量尺的胶囊药丸文本框 */
+.ruler-label {
+    background: var(--color-clue-border);
+    color: white;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 99px;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    font-family: var(--font-sans);
+    transition: background 0.3s ease;
+}
+

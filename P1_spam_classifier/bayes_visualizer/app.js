@@ -111,7 +111,7 @@ const STEPS_DATA = [
             <p><strong>看左侧动画：</strong> 两个包含 "winner" 的子集块脱离原有的分类边界，平滑地合并、垂直拉伸撑满整个大方框，<strong>成为我们唯一的“新样本空间”！</strong></p>
             <p>此时，在新样本空间里，垃圾邮件的面积占据了绝大部分。</p>
         `,
-        formula: "P(Winner) = P(w ∩ Ham) + P(w ∩ Spam) = 5% + 40% = 45%",
+        formula: "P(Winner) = P(w ∩ Ham) + P(w ∩ Spam) = 0.05 + 0.40 = 0.45 (即 45%)",
         formulaNote: "筛选出的 'winner' 邮件子集总面积代表 P(Winner)，占全体邮件的 45%。",
         setup: (dom) => {
             dom.container.className = "geometry-container state-4";
@@ -133,11 +133,21 @@ const STEPS_DATA = [
             dom.interSpam.style.height = "100%";
             dom.interSpam.style.opacity = "1";
 
-            // 后验条件概率标签
+            // 空间初收缩：呈现联合概率大小，以维持严谨的推导逻辑
             const labelHam = dom.interHam.querySelector(".box-label");
             const labelSpam = dom.interSpam.querySelector(".box-label");
-            labelHam.innerHTML = "P(Ham | Winner)<br>= 11.11%";
-            labelSpam.innerHTML = "P(Spam | Winner)<br>= 88.89%";
+            labelHam.innerHTML = `
+                <div style="text-align: center;">
+                    <strong style="color: #047857; font-size: 0.72rem;">联合概率 P(w ∩ Ham)</strong><br>
+                    = 0.05
+                </div>
+            `;
+            labelSpam.innerHTML = `
+                <div style="text-align: center;">
+                    <strong style="color: #b91c1c; font-size: 0.72rem;">联合概率 P(w ∩ Spam)</strong><br>
+                    = 0.40
+                </div>
+            `;
         }
     },
     // 步骤 5：后验概率计算
@@ -147,7 +157,7 @@ const STEPS_DATA = [
             <p>在筛选出的 'winner' 邮件子集（总面积占原始全集的 45%）里，我们要计算：<strong>落在此子集里的垃圾邮件（高亮闪烁红黄区域），占整个子集面积的比例是多少？</strong></p>
             <p>直接代入面积数值计算：</p>
             <p class="highlight red" style="text-align: center; font-size: 1.1rem; margin: 0.5rem 0;">
-                40% / 45% = 88.89%
+                0.40 / 0.45 = 88.89%
             </p>
             <p><strong>贝叶斯的实际分类意义：</strong> 观测到 \"winner\" 特征词后，该邮件是垃圾邮件的后验概率，从最初先验概率的 <span class="highlight">50%</span> 暴增到了 <span class="highlight red">88.89%</span>！我们能够非常自信地将其识别、拦截为垃圾邮件！</p>
         `,
@@ -185,8 +195,18 @@ const STEPS_DATA = [
 
             const labelHam = dom.interHam.querySelector(".box-label");
             const labelSpam = dom.interSpam.querySelector(".box-label");
-            labelHam.innerHTML = "P(Ham | Winner)<br>= 11.11%";
-            labelSpam.innerHTML = "P(Spam | Winner)<br>= 88.89%";
+            labelHam.innerHTML = `
+                <div style="text-align: center; line-height: 1.3;">
+                    <strong style="color: #047857; font-size: 0.72rem;">后验 P(Ham | Winner)</strong><br>
+                    = <div class="fraction" style="font-size: 0.75em; vertical-align: middle;"><span class="num" style="color: #047857; border-color: #047857;">0.05</span><span class="den" style="color: #047857;">0.45</span></div> = 11.11%
+                </div>
+            `;
+            labelSpam.innerHTML = `
+                <div style="text-align: center; line-height: 1.3;">
+                    <strong style="color: #b91c1c; font-size: 0.72rem;">后验 P(Spam | Winner)</strong><br>
+                    = <div class="fraction" style="font-size: 0.75em; vertical-align: middle;"><span class="num" style="color: #b91c1c; border-color: #b91c1c;">0.40</span><span class="den" style="color: #b91c1c;">0.45</span></div> = 88.89%
+                </div>
+            `;
         }
     },
     // 步骤 6：从具体到抽象 —— 符号映射
@@ -229,8 +249,18 @@ const STEPS_DATA = [
 
             const labelHam = dom.interHam.querySelector(".box-label");
             const labelSpam = dom.interSpam.querySelector(".box-label");
-            labelHam.innerHTML = "P(A<sub>2</sub> | B)<br>= 11.11%";
-            labelSpam.innerHTML = "P(A<sub>1</sub> | B)<br>= 88.89%";
+            labelHam.innerHTML = `
+                <div style="text-align: center; line-height: 1.3;">
+                    <strong style="color: #047857; font-size: 0.72rem;">后验 P(A₂ | B)</strong><br>
+                    = <div class="fraction" style="font-size: 0.75em; vertical-align: middle;"><span class="num" style="color: #047857; border-color: #047857;">0.05</span><span class="den" style="color: #047857;">0.45</span></div> = 11.11%
+                </div>
+            `;
+            labelSpam.innerHTML = `
+                <div style="text-align: center; line-height: 1.3;">
+                    <strong style="color: #b91c1c; font-size: 0.72rem;">后验 P(A₁ | B)</strong><br>
+                    = <div class="fraction" style="font-size: 0.75em; vertical-align: middle;"><span class="num" style="color: #b91c1c; border-color: #b91c1c;">0.40</span><span class="den" style="color: #b91c1c;">0.45</span></div> = 88.89%
+                </div>
+            `;
         }
     },
     // 步骤 7：拆解分子（乘法公式）
@@ -254,25 +284,49 @@ const STEPS_DATA = [
         setup: (dom) => {
             dom.container.className = "geometry-container state-7";
             
+            // 物理倒回到步骤 3 的几何形态 (Morph Back to Step 3 layout)
             dom.clueStrip.style.bottom = "0";
-            dom.clueStrip.style.top = "0";
-            dom.clueStrip.style.height = "100%";
+            dom.clueStrip.style.top = "auto";
+            dom.clueStrip.style.height = "80%";
             dom.clueStrip.style.opacity = "1";
             
             dom.interHam.style.left = "0%";
-            dom.interHam.style.width = "11.11%";
-            dom.interHam.style.height = "100%";
+            dom.interHam.style.width = "50%";
+            dom.interHam.style.height = "12.5%";
             dom.interHam.style.opacity = "1";
             
-            dom.interSpam.style.left = "11.11%";
-            dom.interSpam.style.width = "88.89%";
+            dom.interSpam.style.left = "50%";
+            dom.interSpam.style.width = "50%";
             dom.interSpam.style.height = "100%";
             dom.interSpam.style.opacity = "1";
 
+            // 测量尺规高精度定位 - 垃圾邮件 (Spam) 的先验与似然 (放置于盒子外部，避开内部标签重叠)
+            if (dom.hRuler) {
+                dom.hRuler.style.opacity = "1";
+                dom.hRuler.style.left = "50%";
+                dom.hRuler.style.width = "50%";
+                dom.hRuler.style.bottom = "-25px";
+                dom.hRuler.querySelector(".ruler-label").innerHTML = "先验 P(A₁) = 0.50 (宽)";
+            }
+            
+            if (dom.vRuler) {
+                dom.vRuler.style.opacity = "1";
+                dom.vRuler.style.left = "102%";
+                dom.vRuler.style.top = "20%"; // 从 top: 20% 到 bottom: 100% 刚好是 80% 高度
+                dom.vRuler.style.height = "80%";
+                dom.vRuler.querySelector(".ruler-label").innerHTML = "似然 P(B|A₁) = 0.80 (高)";
+            }
+
             const labelHam = dom.interHam.querySelector(".box-label");
             const labelSpam = dom.interSpam.querySelector(".box-label");
-            labelHam.innerHTML = "P(A<sub>2</sub> | B)<br>= 11.11%";
-            labelSpam.innerHTML = "P(A<sub>1</sub> | B)<br>= 88.89%";
+            labelHam.innerHTML = ""; // 隐藏无关分支 label
+            labelSpam.innerHTML = `
+                <div style="text-align: center;">
+                    <strong style="color: #ef4444; font-size: 0.72rem;">交集面积 P(B ∩ A₁)</strong><br>
+                    = P(B | A₁) × P(A₁)<br>
+                    = 0.80 × 0.50 = 0.40 (即 40%)
+                </div>
+            `;
         }
     },
     // 步骤 8：拆解分母（全概率公式）
@@ -297,25 +351,55 @@ const STEPS_DATA = [
         setup: (dom) => {
             dom.container.className = "geometry-container state-8";
             
+            // 物理倒回到步骤 3 的几何形态 (Morph Back to Step 3 layout)
             dom.clueStrip.style.bottom = "0";
-            dom.clueStrip.style.top = "0";
-            dom.clueStrip.style.height = "100%";
+            dom.clueStrip.style.top = "auto";
+            dom.clueStrip.style.height = "80%";
             dom.clueStrip.style.opacity = "1";
             
             dom.interHam.style.left = "0%";
-            dom.interHam.style.width = "11.11%";
-            dom.interHam.style.height = "100%";
+            dom.interHam.style.width = "50%";
+            dom.interHam.style.height = "12.5%";
             dom.interHam.style.opacity = "1";
             
-            dom.interSpam.style.left = "11.11%";
-            dom.interSpam.style.width = "88.89%";
+            dom.interSpam.style.left = "50%";
+            dom.interSpam.style.width = "50%";
             dom.interSpam.style.height = "100%";
             dom.interSpam.style.opacity = "1";
 
+            // 测量尺规高精度定位 - 正常邮件 (Ham) 的先验与似然 (放置于盒子外部，避开内部标签重叠)
+            if (dom.hRuler) {
+                dom.hRuler.style.opacity = "1";
+                dom.hRuler.style.left = "0%";
+                dom.hRuler.style.width = "50%";
+                dom.hRuler.style.bottom = "-25px";
+                dom.hRuler.querySelector(".ruler-label").innerHTML = "先验 P(A₂) = 0.50 (宽)";
+            }
+            
+            if (dom.vRuler) {
+                dom.vRuler.style.opacity = "1";
+                dom.vRuler.style.left = "-35px";
+                dom.vRuler.style.top = "90%"; // 从 top: 90% 到 bottom: 100% 刚好是 10% 高度
+                dom.vRuler.style.height = "10%";
+                dom.vRuler.querySelector(".ruler-label").innerHTML = "似然 P(B|A₂) = 0.10 (高)";
+            }
+
             const labelHam = dom.interHam.querySelector(".box-label");
             const labelSpam = dom.interSpam.querySelector(".box-label");
-            labelHam.innerHTML = "P(A<sub>2</sub> | B)<br>= 11.11%";
-            labelSpam.innerHTML = "P(A<sub>1</sub> | B)<br>= 88.89%";
+            labelHam.innerHTML = `
+                <div style="text-align: center;">
+                    <strong style="color: #10b981; font-size: 0.72rem;">交集面积 P(B ∩ A₂)</strong><br>
+                    = P(B | A₂) × P(A₂)<br>
+                    = 0.10 × 0.50 = 0.05 (即 5%)
+                </div>
+            `;
+            labelSpam.innerHTML = `
+                <div style="text-align: center;">
+                    <strong style="color: #ef4444; font-size: 0.72rem;">交集面积 P(B ∩ A₁)</strong><br>
+                    = P(B | A₁) × P(A₁)<br>
+                    = 0.80 × 0.50 = 0.40 (即 40%)
+                </div>
+            `;
         }
     },
     // 步骤 9：合龙大厦
@@ -361,8 +445,20 @@ const STEPS_DATA = [
 
             const labelHam = dom.interHam.querySelector(".box-label");
             const labelSpam = dom.interSpam.querySelector(".box-label");
-            labelHam.innerHTML = "P(A<sub>2</sub> | B)<br>= 11.11%<br><span style='font-size:0.55rem; font-weight:normal; opacity:0.8;'>(替补假说)</span>";
-            labelSpam.innerHTML = "P(A<sub>1</sub> | B)<br>= 88.89%<br><span style='font-size:0.55rem; font-weight:normal; opacity:0.8;'>(目标假说)</span>";
+            labelHam.innerHTML = `
+                <div style="text-align: center; line-height: 1.3;">
+                    <strong style="color: #047857; font-size: 0.72rem;">后验 P(A₂ | B)</strong><br>
+                    = <div class="fraction" style="font-size: 0.75em; vertical-align: middle;"><span class="num" style="color: #047857; border-color: #047857;">0.05</span><span class="den" style="color: #047857;">0.45</span></div> = 11.11%<br>
+                    <span style="font-size: 0.55rem; font-weight: normal; opacity: 0.85;">(替补假说)</span>
+                </div>
+            `;
+            labelSpam.innerHTML = `
+                <div style="text-align: center; line-height: 1.3;">
+                    <strong style="color: #b91c1c; font-size: 0.72rem;">后验 P(A₁ | B)</strong><br>
+                    = <div class="fraction" style="font-size: 0.75em; vertical-align: middle;"><span class="num" style="color: #b91c1c; border-color: #b91c1c;">0.40</span><span class="den" style="color: #b91c1c;">0.45</span></div> = 88.89%<br>
+                    <span style="font-size: 0.55rem; font-weight: normal; opacity: 0.85;">(目标假说)</span>
+                </div>
+            `;
         }
     }
 ];
@@ -377,6 +473,10 @@ const DOM = {
     clueStrip: document.getElementById("clue-strip"),
     interHam: document.getElementById("inter-ham"),
     interSpam: document.getElementById("inter-spam"),
+    
+    // 🏛️ 尺规 DOM 缓存
+    hRuler: document.getElementById("h-ruler"),
+    vRuler: document.getElementById("v-ruler"),
     
     // 控制和文字
     stepCounter: document.getElementById("step-counter"),
@@ -424,6 +524,27 @@ function renderStep(index) {
             dot.classList.remove("active");
         }
     });
+
+    // 默认隐藏并重置物理测量尺规 (Default reset & hide pedagogical rulers)
+    if (DOM.hRuler && DOM.vRuler) {
+        DOM.hRuler.style.opacity = "0";
+        DOM.vRuler.style.opacity = "0";
+    }
+
+    // 根据步骤动态切换大版分类标签的符号表达 (Bridge concrete terms and general math symbols dynamically)
+    if (DOM.ham && DOM.spam) {
+        const labelHam = DOM.ham.querySelector(".label-ham");
+        const labelSpam = DOM.spam.querySelector(".label-spam");
+        if (labelHam && labelSpam) {
+            if (index < 5) {
+                labelHam.innerHTML = "正常邮件 Ham<br>(P(Ham) = 0.50)";
+                labelSpam.innerHTML = "垃圾邮件 Spam<br>(P(Spam) = 0.50)";
+            } else {
+                labelHam.innerHTML = "事件 A₂ (正常邮件)<br>P(A₂) = 0.50";
+                labelSpam.innerHTML = "事件 A₁ (垃圾邮件)<br>P(A₁) = 0.50";
+            }
+        }
+    }
 
     // 动态文字与公式映射
     DOM.stepTitle.innerHTML = step.title;
