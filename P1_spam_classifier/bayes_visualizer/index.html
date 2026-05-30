@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贝叶斯公式“面积几何割裂”交互式教学面板 - AI Evolutionary Lab</title>
+    <meta name="description" content="用最直观的几何面积划分与拉伸动效，展示贝叶斯公式的物理本质：线索出现导致样本空间缩减。">
+    <!-- 引入 Google Fonts 提升排版现代感 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 头部标题栏 -->
+        <header class="app-header">
+            <div class="header-logo">
+                <span class="logo-icon">🏛️</span>
+                <div class="logo-text">
+                    <h1>AI Evolutionary Lab</h1>
+                    <p>项目 1 拓展：贝叶斯公式的几何本质</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <span class="badge">项目 1：垃圾邮件分类器底气</span>
+            </div>
+        </header>
+
+        <!-- 主交互区域：双栏排版 -->
+        <main class="app-main">
+            <!-- 左侧：白板几何动画区 -->
+            <section class="visualizer-section">
+                <div class="whiteboard-card">
+                    <!-- 白板网格背景 -->
+                    <div class="whiteboard-grid"></div>
+                    
+                    <!-- 核心几何图形容器 -->
+                    <div class="geometry-container" id="geometry-container">
+                        <!-- 样本全集大矩形框 (Universe U) -->
+                        <div class="universe-rect" id="universe-rect">
+                            <span class="area-label label-u">样本全集 U (所有收到的邮件, 面积 = 1.0)</span>
+                            
+                            <!-- 正常邮件区域 (Ham Rect) -->
+                            <div class="class-rect ham-rect" id="ham-rect">
+                                <span class="area-label label-ham">正常邮件 Ham<br>(P(Ham) = 0.50)</span>
+                            </div>
+                            
+                            <!-- 垃圾邮件区域 (Spam Rect) -->
+                            <div class="class-rect spam-rect" id="spam-rect">
+                                <span class="area-label label-spam">垃圾邮件 Spam<br>(P(Spam) = 0.50)</span>
+                            </div>
+                            
+                            <!-- 纵向割裂线 (Split Line) -->
+                            <div class="split-line" id="split-line"></div>
+
+                            <!-- "winner" 线索横向切片 (Clue Strip) -->
+                            <div class="clue-strip" id="clue-strip">
+                                <span class="strip-label" id="strip-label">含有 'winner' 的邮件子集 (P(Winner))</span>
+                                
+                                <!-- 内部交集区域标示线 -->
+                                <div class="intersection-box intersection-ham" id="inter-ham">
+                                    <span class="box-label">P(w ∩ Ham) = 0.05</span>
+                                </div>
+                                <div class="intersection-box intersection-spam" id="inter-spam">
+                                    <span class="box-label">P(w ∩ Spam) = 0.40</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 右侧：玻璃拟态叙述与教学卡片 -->
+            <section class="narration-section">
+                <div class="narrative-card">
+                    <!-- 步进指示器 -->
+                    <div class="stepper-indicator">
+                        <div class="step-dots" id="step-dots">
+                            <span class="dot active"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span> <!-- 扩展为 9 个教学步骤圆点 -->
+                        </div>
+                        <span class="step-text" id="step-counter">步骤 1 / 9</span>
+                    </div>
+
+                    <!-- 动态教学卡片内容 -->
+                    <div class="narrative-content">
+                        <h2 class="step-title" id="step-title">宇宙初始：样本全集 U</h2>
+                        <div class="step-desc" id="step-desc">
+                            <!-- JS 动态注入 -->
+                        </div>
+                    </div>
+
+                    <!-- 贝叶斯公式卡片 -->
+                    <div class="formula-card">
+                        <div class="formula-title">📐 数学公式看板 (Formula Panel)</div>
+                        <div class="formula-display" id="formula-display">
+                            <!-- JS 动态注入 -->
+                        </div>
+                        <div class="formula-note" id="formula-note">
+                            <!-- JS 动态说明 -->
+                        </div>
+                    </div>
+
+                    <!-- 底部控制按钮 -->
+                    <div class="stepper-controls">
+                        <button class="btn btn-prev" id="btn-prev" disabled>
+                            <span class="arrow">←</span> 上一步
+                        </button>
+                        <button class="btn btn-next" id="btn-next">
+                            下一步 <span class="arrow">→</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- 引入核心逻辑 -->
+    <script src="app.js"></script>
+</body>
+</html>
